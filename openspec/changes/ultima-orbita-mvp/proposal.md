@@ -6,7 +6,7 @@ El proyecto necesita convertir el PRD de *Última órbita* en una experiencia ar
 
 ## What Changes
 
-- Crear el juego 2D para navegador usando HTML5 Canvas, con pantalla de inicio, partida y pantalla de Game Over.
+- Crear el juego 2D para navegador usando JavaScript y HTML5 Canvas, con pantalla de inicio, partida y pantalla de Game Over.
 - Implementar movimiento horizontal de la nave, disparo láser, enemigos, colisiones, vidas y puntuación.
 - Organizar enemigos en oleadas finitas; al completar una oleada, la siguiente incluirá más enemigos y aumentará su velocidad de descenso.
 - Mantener el alcance del MVP acotado: sin multijugador, narrativa extensa, tienda de mejoras ni audio avanzado.

@@ -6,6 +6,7 @@ Un shooter espacial arcade en 2D donde la supervivencia depende de esquivar y de
 ## 2. Alcance (Scope)
 
 ### Lo que INCLUYE el MVP:
+* **Tecnología:** Juego para navegador implementado en JavaScript y HTML5 Canvas.
 * **Entorno y Movimiento:** Pantalla de juego 2D en navegador (HTML5 Canvas). Movimiento horizontal de la nave del jugador limitado a los bordes de la pantalla.
 * **Sistema de Disparo:** La nave puede disparar proyectiles láser hacia la parte superior mediante una tecla designada (ej. barra espaciadora).
 * **Enemigos y Oleadas:** Generación automática de enemigos que descienden desde la parte superior con patrones simples de movimiento. Cada oleada nueva aumenta la dificultad respecto a la anterior, incrementando la cantidad de enemigos y su velocidad de descenso.

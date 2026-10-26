@@ -14,6 +14,6 @@ Una versión básica jugable que incluya:
 *  Sistema de colisiones y detección de impactos.
 * Marcador de puntuación y gestión de vidas con pantalla de fin de partida (*Game Over*).
 
-## 4. Preguntas Abiertas / Decisiones Tecnológicas
-* ¿Tecnología base?: Determinar entre JavaScript (HTML5 Canvas) o Python (Pygame).
-* ¿Balanceo de dificultad?: Decidir la tasa de aparición de enemigos y velocidad inicial de la nave tras las primeras pruebas del MVP.
+## 4. Decisiones Tecnológicas / Preguntas Abiertas
+* **Tecnología base definida:** El juego se implementará en JavaScript para navegador, usando HTML5 Canvas. No se utilizará Python/Pygame.
+* **Balanceo de dificultad:** Decidir la tasa de aparición de enemigos y velocidad inicial de la nave tras las primeras pruebas del MVP.
