@@ -12,7 +12,7 @@
 
 ## 3. Enemigos, vidas y oleadas
 
-- [ ] 3.1 Implementar la primera oleada de cinco enemigos con descenso a 40 píxeles por segundo y progresión de un enemigo y 10 píxeles por segundo por oleada; verificar que las oleadas segunda y tercera tienen respectivamente 6/7 enemigos y 50/60 píxeles por segundo.
+- [x] 3.1 Implementar enemigos con posición, velocidad, vida y patrones de descenso/persecución; espaciar su aparición desde la parte superior y los laterales, y mantener la progresión de cinco enemigos a 40 píxeles por segundo, sumando un enemigo y 10 píxeles por segundo por oleada; verificar que las oleadas segunda y tercera tienen respectivamente 6/7 enemigos y 50/60 píxeles por segundo.
 - [ ] 3.2 Implementar colisión enemigo-nave y retirada del enemigo impactado; verificar que cada impacto resta exactamente una vida y no se cuenta de nuevo en cuadros posteriores.
 - [ ] 3.3 Avanzar de oleada cuando se resuelva su último enemigo y la partida siga activa; verificar el avance tanto al eliminar enemigos como al recibir impactos, y que no se genere otra oleada al perder la última vida.
 
