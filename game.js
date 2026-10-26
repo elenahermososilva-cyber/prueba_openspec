@@ -14,6 +14,7 @@ const SHIP_HEIGHT = 42;
 const SHIP_SPEED = 360;
 const LASER_SPEED = 560;
 const LASER_INTERVAL = 0.18;
+const INITIAL_LIVES = 3;
 
 const ship = {
   x: WIDTH / 2,
@@ -22,7 +23,13 @@ const ship = {
 
 const pressedKeys = new Set();
 const lasers = [];
-let started = false;
+const enemies = [];
+const gameState = {
+  status: "start",
+  score: 0,
+  lives: INITIAL_LIVES,
+};
+const messageElement = document.querySelector("#game-message");
 let laserCooldown = 0;
 let previousTime = 0;
 
@@ -53,7 +60,7 @@ window.addEventListener("keydown", (event) => {
   pressedKeys.add(event.code);
 
   if (event.code === "Enter") {
-    started = true;
+    startGame();
   }
 });
 
@@ -72,8 +79,23 @@ function fireLaser() {
   });
 }
 
+function resetEntities() {
+  lasers.length = 0;
+  enemies.length = 0;
+  laserCooldown = 0;
+}
+
+function startGame() {
+  resetEntities();
+  gameState.status = "playing";
+  gameState.score = 0;
+  gameState.lives = INITIAL_LIVES;
+  ship.x = WIDTH / 2;
+  messageElement.textContent = "";
+}
+
 function update(deltaTime) {
-  if (!started) {
+  if (gameState.status !== "playing") {
     return;
   }
 
@@ -133,6 +155,45 @@ function drawShip() {
   context.restore();
 }
 
+function drawHeart(x, y, filled) {
+  context.save();
+  context.translate(x, y);
+  context.beginPath();
+  context.moveTo(0, 7);
+  context.lineTo(-14, -5);
+  context.bezierCurveTo(-22, -12, -16, -24, -7, -20);
+  context.bezierCurveTo(-3, -18, 0, -14, 0, -11);
+  context.bezierCurveTo(0, -14, 3, -18, 7, -20);
+  context.bezierCurveTo(16, -24, 22, -12, 14, -5);
+  context.closePath();
+  context.fillStyle = filled ? "#ff687f" : "#59657d";
+  context.strokeStyle = filled ? "#ffd0d8" : "#8792a8";
+  context.lineWidth = 2;
+  context.fill();
+  context.stroke();
+  context.restore();
+}
+
+function drawHud() {
+  const hudPadding = 24;
+  const heartSpacing = 40;
+
+  for (let index = 0; index < INITIAL_LIVES; index += 1) {
+    drawHeart(
+      hudPadding + index * heartSpacing,
+      hudPadding + 12,
+      index < gameState.lives,
+    );
+  }
+
+  context.save();
+  context.fillStyle = "#eef4ff";
+  context.font = "600 26px Segoe UI, sans-serif";
+  context.textAlign = "right";
+  context.fillText(String(gameState.score), WIDTH - hudPadding, hudPadding + 12);
+  context.restore();
+}
+
 function render() {
   context.clearRect(0, 0, WIDTH, HEIGHT);
   context.fillStyle = "#080d1a";
@@ -147,6 +208,8 @@ function render() {
   }
   context.globalAlpha = 1;
 
+  drawHud();
+
   for (const laser of lasers) {
     context.fillStyle = "#ff687f";
     context.shadowColor = "#ff345e";
@@ -157,7 +220,7 @@ function render() {
 
   drawShip();
 
-  if (!started) {
+  if (gameState.status === "start") {
     context.fillStyle = "#eef4ff";
     context.textAlign = "center";
     context.font = "600 25px Segoe UI, sans-serif";
@@ -165,6 +228,16 @@ function render() {
     context.fillStyle = "#aebbd4";
     context.font = "16px Segoe UI, sans-serif";
     context.fillText("La nave se controla con las flechas o A y D", WIDTH / 2, HEIGHT / 2 + 20);
+  }
+
+  if (gameState.status === "game-over") {
+    context.fillStyle = "#eef4ff";
+    context.textAlign = "center";
+    context.font = "600 30px Segoe UI, sans-serif";
+    context.fillText("Game Over", WIDTH / 2, HEIGHT / 2 - 12);
+    context.fillStyle = "#aebbd4";
+    context.font = "16px Segoe UI, sans-serif";
+    context.fillText(`Puntuación final: ${gameState.score}`, WIDTH / 2, HEIGHT / 2 + 20);
   }
 }
 
