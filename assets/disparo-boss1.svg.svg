@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 200" width="100" height="200">
+  <!-- Aura de calor expansiva -->
+  <polygon points="50,200 10,100 20,0 80,0 90,100" fill="#ff4400" opacity="0.4" />
+  
+  <!-- Haz de energía principal -->
+  <rect x="25" y="0" width="50" height="190" rx="10" fill="#ff0000" />
+  
+  <!-- Núcleo supercaliente interior -->
+  <rect x="35" y="0" width="30" height="185" rx="15" fill="#ffffff" />
+  
+  <!-- Relámpagos de inestabilidad -->
+  <path d="M 25 40 Q 5 60 25 80" fill="none" stroke="#ffff00" stroke-width="4" stroke-linecap="round" />
+  <path d="M 75 110 Q 95 130 75 150" fill="none" stroke="#ffff00" stroke-width="4" stroke-linecap="round" />
+  <path d="M 25 140 Q 10 160 25 180" fill="none" stroke="#ffff00" stroke-width="4" stroke-linecap="round" />
+</svg>

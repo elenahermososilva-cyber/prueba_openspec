@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 50 100" width="50" height="100">
+  <!-- Aura inestable -->
+  <ellipse cx="25" cy="65" rx="20" ry="25" fill="#558855" opacity="0.7" />
+  <!-- Masa de plasma -->
+  <circle cx="25" cy="70" r="14" fill="#33ff33" />
+  <!-- Núcleo supercaliente -->
+  <circle cx="25" cy="70" r="6" fill="#ffffff" />
+</svg>

@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 50 100" width="50" height="100">
+  <!-- Estela -->
+  <polygon points="25,15 12,60 38,60" fill="#ff3333" opacity="0.7" />
+  <!-- Esfera de energía -->
+  <circle cx="25" cy="70" r="12" fill="#ffff00" />
+</svg>

@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="100" height="100">
+  <!-- Aura exterior pulsante -->
+  <circle cx="50" cy="50" r="45" fill="#ff7700" opacity="0.4" />
+  <!-- Esfera principal -->
+  <circle cx="50" cy="50" r="35" fill="#ffaa00" />
+  <!-- Borde de energía interior -->
+  <circle cx="50" cy="50" r="30" fill="none" stroke="#ffffff" stroke-width="2" opacity="0.5" />
+  
+  <!-- Icono: Proyectil central -->
+  <rect x="32" y="30" width="8" height="40" rx="4" fill="#ffffff" />
+  
+  <!-- Icono: Símbolo de suma (+) -->
+  <rect x="52" y="47" width="18" height="6" rx="2" fill="#ffffff" />
+  <rect x="58" y="41" width="6" height="18" rx="2" fill="#ffffff" />
+</svg>
