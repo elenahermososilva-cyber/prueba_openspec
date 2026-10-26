@@ -1,0 +1,35 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content="#080d1a">
+    <title>Última órbita</title>
+    <link rel="stylesheet" href="styles.css">
+    <script src="game.js" defer></script>
+  </head>
+  <body>
+    <main class="game">
+      <header class="game__header">
+        <h1>Última órbita</h1>
+        <p>Mueve la nave, mantén pulsado espacio para disparar y sobrevive.</p>
+      </header>
+      <canvas
+        id="game-canvas"
+        class="game__canvas"
+        width="960"
+        height="600"
+        aria-label="Juego Última órbita"
+      >
+        Tu navegador no admite Canvas.
+      </canvas>
+      <p class="game__controls">
+        <kbd>←</kbd> <kbd>→</kbd> o <kbd>A</kbd> <kbd>D</kbd> para moverte
+        <span aria-hidden="true">·</span>
+        <kbd>Espacio</kbd> para disparar
+        <span aria-hidden="true">·</span>
+        <kbd>Enter</kbd> para empezar
+      </p>
+    </main>
+  </body>
+</html>
