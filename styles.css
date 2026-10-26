@@ -59,6 +59,14 @@ body {
   text-align: center;
 }
 
+.game__message {
+  min-height: 1.5em;
+  margin: 8px 0 0;
+  color: #ffb6c1;
+  font-weight: 600;
+  text-align: center;
+}
+
 kbd {
   padding: 2px 7px;
   border: 1px solid #526487;
