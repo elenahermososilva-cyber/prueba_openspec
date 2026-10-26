@@ -2,12 +2,12 @@
 
 ## 1. Aplicación y pantalla de juego
 
-- [ ] 1.1 Crear la página estática, estilos y área HTML5 Canvas sin dependencias externas; verificar que se abre localmente en un navegador y muestra la pantalla inicial.
+- [x] 1.1 Crear la página estática, estilos y área HTML5 Canvas sin dependencias externas; verificar que se abre localmente en un navegador y muestra la pantalla inicial.
 - [ ] 1.2 Implementar los estados inicial, partida y fin de partida, la interfaz DOM para puntuación/vidas y el bucle de actualización/renderizado; verificar que Enter inicia la partida y el marcador permanece visible.
 
 ## 2. Nave y combate
 
-- [ ] 2.1 Implementar el movimiento horizontal con flechas o A/D y limitar la nave al área visible; verificar ambos sentidos y los dos límites de pantalla.
+- [x] 2.1 Implementar el movimiento horizontal con flechas o A/D y limitar la nave al área visible; verificar ambos sentidos y los dos límites de pantalla.
 - [ ] 2.2 Implementar el disparo con espacio, el movimiento de proyectiles y las colisiones láser-enemigo; verificar que ambos desaparecen y cada impacto suma exactamente 10 puntos.
 
 ## 3. Enemigos, vidas y oleadas
