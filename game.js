@@ -14,6 +14,12 @@ const SHIP_HEIGHT = 42;
 const SHIP_SPEED = 360;
 const LASER_SPEED = 560;
 const LASER_INTERVAL = 0.18;
+const ENEMY_RADIUS = 18;
+const ENEMIES_PER_WAVE = 5;
+const ENEMY_SPAWN_INTERVAL = 0.85;
+const ENEMY_BASE_SPEED = 40;
+const ENEMY_SPEED_PER_WAVE = 10;
+const ENEMY_PURSUIT_SPEED = 105;
 
 const ship = {
   x: WIDTH / 2,
@@ -22,9 +28,13 @@ const ship = {
 
 const pressedKeys = new Set();
 const lasers = [];
+const enemies = [];
 let started = false;
 let laserCooldown = 0;
 let previousTime = 0;
+let waveNumber = 0;
+let enemiesToSpawn = 0;
+let enemySpawnCooldown = 0;
 
 const stars = Array.from({ length: 90 }, () => ({
   x: Math.random() * WIDTH,
@@ -53,7 +63,10 @@ window.addEventListener("keydown", (event) => {
   pressedKeys.add(event.code);
 
   if (event.code === "Enter") {
-    started = true;
+    if (!started) {
+      started = true;
+      startWave();
+    }
   }
 });
 
@@ -70,6 +83,86 @@ function fireLaser() {
     x: ship.x,
     y: ship.y - SHIP_HEIGHT / 2,
   });
+}
+
+function startWave() {
+  waveNumber += 1;
+  enemiesToSpawn = ENEMIES_PER_WAVE + waveNumber - 1;
+  enemySpawnCooldown = 0;
+}
+
+function spawnEnemy() {
+  const waveSize = ENEMIES_PER_WAVE + waveNumber - 1;
+  const spawnIndex = waveSize - enemiesToSpawn;
+  const spawnPosition = spawnIndex % 3;
+  const pattern = spawnIndex % 2 === 0 ? "descend" : "pursue";
+  let x;
+  let y;
+  let vx = 0;
+  let spawnEdge = "top";
+
+  if (spawnPosition === 0) {
+    x = ENEMY_RADIUS + Math.random() * (WIDTH - ENEMY_RADIUS * 2);
+    y = -ENEMY_RADIUS;
+  } else {
+    spawnEdge = spawnPosition === 1 ? "left" : "right";
+    x = spawnEdge === "left" ? -ENEMY_RADIUS : WIDTH + ENEMY_RADIUS;
+    y = ENEMY_RADIUS + Math.random() * (HEIGHT * 0.45);
+    if (pattern === "descend") {
+      vx = spawnEdge === "left" ? ENEMY_PURSUIT_SPEED : -ENEMY_PURSUIT_SPEED;
+    }
+  }
+
+  enemies.push({
+    x,
+    y,
+    vx,
+    vy: ENEMY_BASE_SPEED + (waveNumber - 1) * ENEMY_SPEED_PER_WAVE,
+    health: 1,
+    maxHealth: 1,
+    pattern,
+    spawnEdge,
+    radius: ENEMY_RADIUS,
+  });
+  enemiesToSpawn -= 1;
+}
+
+function updateEnemies(deltaTime) {
+  enemySpawnCooldown -= deltaTime;
+  while (enemiesToSpawn > 0 && enemySpawnCooldown <= 0) {
+    spawnEnemy();
+    enemySpawnCooldown += ENEMY_SPAWN_INTERVAL;
+  }
+
+  for (const enemy of enemies) {
+    if (enemy.pattern === "pursue") {
+      const horizontalDistance = ship.x - enemy.x;
+      enemy.vx =
+        Math.abs(horizontalDistance) <= enemy.radius
+          ? 0
+          : Math.sign(horizontalDistance) * ENEMY_PURSUIT_SPEED;
+    } else if (
+      enemy.spawnEdge !== "top" &&
+      enemy.x >= enemy.radius &&
+      enemy.x <= WIDTH - enemy.radius
+    ) {
+      enemy.vx = 0;
+    }
+
+    enemy.x += enemy.vx * deltaTime;
+    enemy.y += enemy.vy * deltaTime;
+    enemy.x = Math.max(enemy.radius, Math.min(WIDTH - enemy.radius, enemy.x));
+  }
+
+  for (let index = enemies.length - 1; index >= 0; index -= 1) {
+    if (enemies[index].y - enemies[index].radius > HEIGHT) {
+      enemies.splice(index, 1);
+    }
+  }
+
+  if (enemiesToSpawn === 0 && enemies.length === 0) {
+    startWave();
+  }
 }
 
 function update(deltaTime) {
@@ -106,6 +199,29 @@ function update(deltaTime) {
       lasers.splice(index, 1);
     }
   }
+
+  updateEnemies(deltaTime);
+}
+
+function drawEnemy(enemy) {
+  context.save();
+  context.translate(enemy.x, enemy.y);
+  context.fillStyle = enemy.pattern === "pursue" ? "#ff9b6b" : "#ff526f";
+  context.strokeStyle = "#ffe4eb";
+  context.lineWidth = 2;
+  context.beginPath();
+  context.moveTo(0, enemy.radius);
+  context.lineTo(-enemy.radius, -enemy.radius / 2);
+  context.lineTo(-enemy.radius / 2, -enemy.radius);
+  context.lineTo(0, -enemy.radius / 2);
+  context.lineTo(enemy.radius / 2, -enemy.radius);
+  context.lineTo(enemy.radius, -enemy.radius / 2);
+  context.closePath();
+  context.fill();
+  context.stroke();
+  context.fillStyle = "#fff3a6";
+  context.fillRect(-3, -5, 6, 6);
+  context.restore();
 }
 
 function drawShip() {
@@ -147,6 +263,10 @@ function render() {
   }
   context.globalAlpha = 1;
 
+  for (const enemy of enemies) {
+    drawEnemy(enemy);
+  }
+
   for (const laser of lasers) {
     context.fillStyle = "#ff687f";
     context.shadowColor = "#ff345e";
@@ -156,6 +276,16 @@ function render() {
   context.shadowBlur = 0;
 
   drawShip();
+
+  if (started) {
+    context.fillStyle = "#eef4ff";
+    context.textAlign = "left";
+    context.font = "600 15px Segoe UI, sans-serif";
+    context.fillText(`Oleada ${waveNumber}`, 18, 28);
+    context.fillStyle = "#aebbd4";
+    context.font = "14px Segoe UI, sans-serif";
+    context.fillText(`Enemigos: ${enemies.length + enemiesToSpawn}`, 18, 49);
+  }
 
   if (!started) {
     context.fillStyle = "#eef4ff";
