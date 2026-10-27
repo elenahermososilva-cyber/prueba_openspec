@@ -42,7 +42,21 @@ A continuación, accede a `http://localhost:8000` en tu navegador.
 
 ## 🎮 4. Mecánicas del Juego y Funcionalidades
 
-### 4.1 Sistema de Dificultad y HUD
+### 4.1 Funcionalidades base del MVP
+
+* Pantalla de inicio y Game Over con reinicio de partida.
+
+* Movimiento horizontal de la nave dentro de los límites de la pantalla.
+
+* Sistema de disparos mediante proyectiles láser.
+
+* Generación de enemigos con patrones de movimiento y aceleración por oleadas.
+
+* Detección de colisiones (láser-enemigo y enemigo-nave).
+
+* Sistema de vidas y marcador de puntuación en tiempo real.
+
+### 4.2 Sistema de Dificultad y HUD
 
 La dificultad escala dinámicamente según el tiempo efectivo de amenaza. Los modos de inicio ajustan el punto de partida temporal: **Fácil** empieza en $t = 0\text{ min}$, **Normal** en $t = 2:30\text{ min}$ y **Difícil** en $t = 5:00\text{ min}$ (por lo que alcanzar el minuto 5 en Fácil equivale a comenzar en Difícil).
 
@@ -59,7 +73,7 @@ El HUD incluye una **barra vertical a la derecha** que refleja de forma visual e
 
 > *Nota de diseño*: El generador de enemigos incluye un algoritmo de equidad para evitar crear situaciones injustas o colisiones inevitables al no generar enemigos directamente sobre la posición actual de la nave.
 
-### 4.2 Combate, Jefes y Mejoras (Orbes)
+### 4.3 Combate, Jefes y Mejoras (Orbes)
 
 * **Enemigos y Proyectiles**:
   * Tres tipos de enemigos estándar con sprites, resistencia, patrones de movimiento y proyectiles específicos.
@@ -80,7 +94,7 @@ El HUD incluye una **barra vertical a la derecha** que refleja de forma visual e
     * 🎯 **Perforación**: Disparos que atraviesan múltiples objetivos.
     * 🪭 **Abanico**: Cobertura de disparo en ángulo amplio.
 
-### 4.3 Recursos Gráficos
+### 4.4 Recursos Gráficos
 
 El juego emplea vectores SVG locales almacenados en la carpeta `assets/`:
 * Nave principal, 3 tipos de enemigos, Boss y proyectiles.
@@ -88,7 +102,7 @@ El juego emplea vectores SVG locales almacenados en la carpeta `assets/`:
 * Efectos visuales de renderizado en Canvas: halos tenues en orbes y brillo moderado en proyectiles.
 * **Sistema de reserva (Fallback)**: Si algún archivo SVG no se puede cargar correctamente, el motor gráfico dibuja un indicador visual alternativo.
 
-### 4.4 Controles del Juego
+### 4.5 Controles del Juego
 
 | Tecla | Acción |
 | :--- | :--- |
@@ -153,7 +167,7 @@ Tal y como establece el enunciado de la práctica, tras completar el MVP funcion
 
 ## 📢 8. Presentación y Documentación
 
-* **Presentación para la exposición oral**: Disponible en [`presentacion.pdf`](./presentacion.pdf).
+* **Presentación para la exposición oral**: *No disponible*.
 * **Documentación de diseño**:
   * [Briefing inicial](./briefing.md)
   * [Product Requirements Document (PRD)](./PRD.md)
