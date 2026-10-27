@@ -31,18 +31,20 @@ const ship = {
 const pressedKeys = new Set();
 const lasers = [];
 const enemies = [];
-let started = false;
 const gameState = {
   status: "start",
   score: 0,
   lives: INITIAL_LIVES,
 };
 const messageElement = document.querySelector("#game-message");
+const scoreElement = document.querySelector("#game-score");
+const livesElement = document.querySelector("#game-lives");
 let laserCooldown = 0;
 let previousTime = 0;
 let waveNumber = 0;
 let enemiesToSpawn = 0;
 let enemySpawnCooldown = 0;
+messageElement.textContent = "Pulsa Enter para empezar.";
 
 const stars = Array.from({ length: 90 }, () => ({
   x: Math.random() * WIDTH,
@@ -68,14 +70,14 @@ window.addEventListener("keydown", (event) => {
   }
 
   event.preventDefault();
-  pressedKeys.add(event.code);
+  if (event.code !== "Enter") {
+    pressedKeys.add(event.code);
+  }
 
-  if (event.code === "Enter") {
-    if (!started) {
-      started = true;
-      startWave();
+  if (event.code === "Enter" && !event.repeat) {
+    if (gameState.status !== "playing") {
+      startGame();
     }
-    startGame();
   }
 });
 
@@ -98,6 +100,7 @@ function startWave() {
   waveNumber += 1;
   enemiesToSpawn = ENEMIES_PER_WAVE + waveNumber - 1;
   enemySpawnCooldown = 0;
+  messageElement.textContent = `Oleada ${waveNumber}`;
 }
 
 function spawnEnemy() {
@@ -169,9 +172,8 @@ function updateEnemies(deltaTime) {
     }
   }
 
-  if (enemiesToSpawn === 0 && enemies.length === 0) {
-    startWave();
-  }
+}
+
 function resetEntities() {
   lasers.length = 0;
   enemies.length = 0;
@@ -180,11 +182,21 @@ function resetEntities() {
 
 function startGame() {
   resetEntities();
+  waveNumber = 0;
+  enemiesToSpawn = 0;
+  enemySpawnCooldown = 0;
   gameState.status = "playing";
   gameState.score = 0;
   gameState.lives = INITIAL_LIVES;
   ship.x = WIDTH / 2;
   messageElement.textContent = "";
+  updateHud();
+  startWave();
+}
+
+function updateHud() {
+  scoreElement.textContent = String(gameState.score);
+  livesElement.textContent = String(gameState.lives);
 }
 
 function update(deltaTime) {
@@ -223,6 +235,50 @@ function update(deltaTime) {
   }
 
   updateEnemies(deltaTime);
+
+  for (let laserIndex = lasers.length - 1; laserIndex >= 0; laserIndex -= 1) {
+    const laser = lasers[laserIndex];
+    const enemyIndex = enemies.findIndex(
+      (enemy) =>
+        Math.abs(laser.x - enemy.x) <= enemy.radius + 2 &&
+        Math.abs(laser.y - enemy.y) <= enemy.radius + 9,
+    );
+
+    if (enemyIndex !== -1) {
+      lasers.splice(laserIndex, 1);
+      enemies.splice(enemyIndex, 1);
+      gameState.score += 10;
+      updateHud();
+    }
+  }
+
+  for (let index = enemies.length - 1; index >= 0; index -= 1) {
+    const enemy = enemies[index];
+    const overlapsShip =
+      Math.abs(enemy.x - ship.x) < enemy.radius + SHIP_WIDTH / 2 &&
+      Math.abs(enemy.y - ship.y) < enemy.radius + SHIP_HEIGHT / 2;
+
+    if (overlapsShip) {
+      enemies.splice(index, 1);
+      gameState.lives -= 1;
+      updateHud();
+
+      if (gameState.lives === 0) {
+        gameState.status = "game-over";
+        pressedKeys.clear();
+        messageElement.textContent = `Game Over. Puntuación final: ${gameState.score}`;
+        break;
+      }
+    }
+  }
+
+  if (
+    gameState.status === "playing" &&
+    enemiesToSpawn === 0 &&
+    enemies.length === 0
+  ) {
+    startWave();
+  }
 }
 
 function drawEnemy(enemy) {
@@ -271,45 +327,6 @@ function drawShip() {
   context.restore();
 }
 
-function drawHeart(x, y, filled) {
-  context.save();
-  context.translate(x, y);
-  context.beginPath();
-  context.moveTo(0, 7);
-  context.lineTo(-14, -5);
-  context.bezierCurveTo(-22, -12, -16, -24, -7, -20);
-  context.bezierCurveTo(-3, -18, 0, -14, 0, -11);
-  context.bezierCurveTo(0, -14, 3, -18, 7, -20);
-  context.bezierCurveTo(16, -24, 22, -12, 14, -5);
-  context.closePath();
-  context.fillStyle = filled ? "#ff687f" : "#59657d";
-  context.strokeStyle = filled ? "#ffd0d8" : "#8792a8";
-  context.lineWidth = 2;
-  context.fill();
-  context.stroke();
-  context.restore();
-}
-
-function drawHud() {
-  const hudPadding = 24;
-  const heartSpacing = 40;
-
-  for (let index = 0; index < INITIAL_LIVES; index += 1) {
-    drawHeart(
-      hudPadding + index * heartSpacing,
-      hudPadding + 12,
-      index < gameState.lives,
-    );
-  }
-
-  context.save();
-  context.fillStyle = "#eef4ff";
-  context.font = "600 26px Segoe UI, sans-serif";
-  context.textAlign = "right";
-  context.fillText(String(gameState.score), WIDTH - hudPadding, hudPadding + 12);
-  context.restore();
-}
-
 function render() {
   context.clearRect(0, 0, WIDTH, HEIGHT);
   context.fillStyle = "#080d1a";
@@ -327,8 +344,6 @@ function render() {
   for (const enemy of enemies) {
     drawEnemy(enemy);
   }
-  drawHud();
-
   for (const laser of lasers) {
     context.fillStyle = "#ff687f";
     context.shadowColor = "#ff345e";
@@ -339,7 +354,7 @@ function render() {
 
   drawShip();
 
-  if (started) {
+  if (gameState.status === "playing") {
     context.fillStyle = "#eef4ff";
     context.textAlign = "left";
     context.font = "600 15px Segoe UI, sans-serif";
@@ -349,7 +364,6 @@ function render() {
     context.fillText(`Enemigos: ${enemies.length + enemiesToSpawn}`, 18, 49);
   }
 
-  if (!started) {
   if (gameState.status === "start") {
     context.fillStyle = "#eef4ff";
     context.textAlign = "center";

@@ -42,6 +42,22 @@ body {
   color: #aebbd4;
 }
 
+.game__hud {
+  display: flex;
+  justify-content: space-between;
+  padding: 0 8px;
+  color: #c4cee0;
+}
+
+.game__hud p {
+  margin: 0 0 10px;
+}
+
+.game__hud strong {
+  margin-left: 6px;
+  color: #eef4ff;
+}
+
 .game__canvas {
   display: block;
   width: 100%;
