@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="100" height="100">
+  <!-- Alas afiladas -->
+  <polygon points="50,70 20,10 40,25 50,20 60,25 80,10" fill="#222222" />
+  <!-- Núcleo central -->
+  <polygon points="50,100 40,15 60,15" fill="#9900ff" />
+  <!-- Cabina reflectante -->
+  <polygon points="50,75 46,45 54,45" fill="#ff00ff" />
+</svg>

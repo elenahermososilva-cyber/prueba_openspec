@@ -22,7 +22,7 @@ body {
 }
 
 .game {
-  width: min(100%, 960px);
+  width: min(100%, 1120px);
 }
 
 .game__header {
@@ -42,20 +42,47 @@ body {
   color: #aebbd4;
 }
 
+.game__difficulty {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+  margin: 14px 0;
+  color: #c4cee0;
+}
+
+.game__difficulty select {
+  padding: 6px 10px;
+  border: 1px solid #526487;
+  border-radius: 6px;
+  background: #17223b;
+  color: #eef4ff;
+  font: inherit;
+}
+
 .game__hud {
   display: flex;
+  flex-wrap: wrap;
   justify-content: space-between;
+  gap: 4px 20px;
   padding: 0 8px;
   color: #c4cee0;
 }
 
 .game__hud p {
-  margin: 0 0 10px;
+  margin: 0 0 8px;
 }
 
 .game__hud strong {
   margin-left: 6px;
   color: #eef4ff;
+}
+
+.game__play-area {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 112px;
+  align-items: stretch;
+  gap: 12px;
 }
 
 .game__canvas {
@@ -66,6 +93,77 @@ body {
   border-radius: 10px;
   background: #080d1a;
   box-shadow: 0 18px 60px #0008;
+}
+
+.threat {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  min-width: 0;
+  padding: 12px 8px;
+  border: 1px solid #526487;
+  border-radius: 10px;
+  background: linear-gradient(180deg, #17223b, #0b1120);
+  text-align: center;
+}
+
+.threat__name {
+  color: #eef4ff;
+  font-size: 0.9rem;
+  line-height: 1.2;
+  overflow-wrap: anywhere;
+}
+
+.threat__name[data-stage="easy"] {
+  color: #56d8ff;
+}
+
+.threat__name[data-stage="normal"] {
+  color: #9ceb72;
+}
+
+.threat__name[data-stage="hard"] {
+  color: #f8d44e;
+}
+
+.threat__name[data-stage="very-hard"] {
+  color: #ff9a4f;
+}
+
+.threat__name[data-stage="impossible"] {
+  color: #ff526f;
+}
+
+.threat__name[data-stage="laughing"] {
+  color: #e48cff;
+}
+
+.threat__level,
+.threat__next {
+  color: #aebbd4;
+  font-size: 0.75rem;
+}
+
+.threat__meter {
+  display: flex;
+  flex: 1;
+  align-items: flex-end;
+  width: 28px;
+  min-height: 180px;
+  overflow: hidden;
+  border: 1px solid #7385a9;
+  border-radius: 999px;
+  background: #080d1a;
+}
+
+.threat__fill {
+  width: 100%;
+  height: 0;
+  border-radius: inherit;
+  background: linear-gradient(0deg, #43d5ff, #f8d44e 55%, #ff526f);
+  box-shadow: 0 0 14px #ff526f88;
+  transition: height 180ms linear;
 }
 
 .game__controls {
@@ -90,4 +188,32 @@ kbd {
   background: #17223b;
   color: #eef4ff;
   font: inherit;
+}
+
+@media (max-width: 560px) {
+  body {
+    padding: 12px;
+  }
+
+  .game__play-area {
+    grid-template-columns: minmax(0, 1fr) 78px;
+    gap: 8px;
+  }
+
+  .threat {
+    padding: 8px 4px;
+  }
+
+  .threat__name {
+    font-size: 0.75rem;
+  }
+
+  .threat__meter {
+    min-height: 120px;
+    width: 20px;
+  }
+
+  .threat__next {
+    font-size: 0.65rem;
+  }
 }

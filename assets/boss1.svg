@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" width="200" height="200">
+  <!-- Alas traseras masivas -->
+  <polygon points="100,160 10,30 60,20 100,50 140,20 190,30" fill="#1a1a24" />
+  <!-- Armadura secundaria -->
+  <polygon points="100,180 30,70 100,40 170,70" fill="#2d2d3a" />
+  <!-- Chasis central rojo oscuro -->
+  <polygon points="100,195 50,100 100,60 150,100" fill="#771111" />
+  
+  <!-- Cañones pesados laterales -->
+  <rect x="25" y="70" width="16" height="80" fill="#555555" />
+  <rect x="159" y="70" width="16" height="80" fill="#555555" />
+  <rect x="28" y="150" width="10" height="20" fill="#ff0000" />
+  <rect x="162" y="150" width="10" height="20" fill="#ff0000" />
+
+  <!-- Núcleo central (Punto débil) -->
+  <circle cx="100" cy="120" r="25" fill="#ff3300" />
+  <circle cx="100" cy="120" r="15" fill="#ffff00" />
+  <circle cx="100" cy="120" r="8" fill="#ffffff" />
+</svg>

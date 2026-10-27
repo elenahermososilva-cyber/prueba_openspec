@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="100" height="100">
+  <!-- Aura exterior protectora -->
+  <circle cx="50" cy="50" r="45" fill="#0088ff" opacity="0.4" />
+  <!-- Esfera principal -->
+  <circle cx="50" cy="50" r="35" fill="#00bbff" />
+  <!-- Borde de energía interior -->
+  <circle cx="50" cy="50" r="30" fill="none" stroke="#ffffff" stroke-width="2" opacity="0.5" />
+  
+  <!-- Icono: Escudo (Polígono) -->
+  <polygon points="35,25 65,25 65,50 50,75 35,50" fill="#ffffff" />
+</svg>
