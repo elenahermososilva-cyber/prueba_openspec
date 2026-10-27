@@ -6,7 +6,7 @@ El MVP actual tiene oleadas finitas, enemigos visualmente iguales y no permite r
 
 ## What Changes
 
-- Sustituir las naves enemigas dibujadas por tres tipos con los SVG existentes, velocidades, resistencia y patrones de disparo distintos; reutilizar los SVG disponibles para proyectiles, jugador, boss y orbes.
+- Sustituir las naves enemigas dibujadas por tres tipos con los SVG existentes, velocidades, resistencia y patrones de disparo distintos; reutilizar los SVG disponibles para proyectiles, jugador, boss y los seis tipos de orbe.
 - Añadir proyectiles enemigos y un ataque de rayo para el boss, colisiones entre disparos aliados y enemigos, y feedback visual al recibir daño o destruir enemigos.
 - Reemplazar las oleadas finitas por aparición continua y progresión de amenaza por tiempo, con selección inicial Fácil/Normal/Difícil, barra de amenaza y sin límite de niveles; aumentar la densidad de enemigos y la presión ofensiva hasta crear runs largas muy exigentes.
 - Permitir picos aleatorios casi imposibles sin generar impactos inevitables ni quitar toda oportunidad de reacción.
@@ -27,6 +27,6 @@ Ninguna. No hay capacidades publicadas todavía en `openspec/specs`; el nuevo co
 ## Impact
 
 - Afecta a la lógica de juego, la interfaz de inicio y HUD, los estilos y el renderizado Canvas en `game.js`, `index.html` y `styles.css`.
-- Integra los recursos SVG ya presentes en `assets/`; algunos poderes nuevos (velocidad, perforación y abanico) no tienen icono dedicado, por lo que su presentación deberá resolverse con recursos existentes o feedback visual sencillo.
+- Integra los recursos SVG locales de `assets/` para todos los poderes y normaliza los nombres de archivo para usar una sola extensión `.svg`.
 - Amplía el contrato funcional del MVP para el bucle de partida, el balance temporal y el comportamiento de enemigos, proyectiles, orbes y bosses.
 - No requiere servicios, APIs ni dependencias de ejecución externas.

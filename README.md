@@ -1,44 +1,42 @@
-Propuesta de Estructura y Reparto de Tareas para el Juego Espacial
-1. Módulo base y Núcleo del Juego (Pactado por los tres al inicio)
-Antes de crear ramas independientes, definid el entorno base en la rama main mediante OpenSpec:
+# Última órbita
 
-Motor / Estructura: Elegir la tecnología (por ejemplo, JavaScript/TypeScript con HTML5 Canvas, o Python con Pygame, según prefiráis).
+Arcade espacial de supervivencia infinita para navegador, construido con JavaScript, HTML5 Canvas y recursos SVG locales. No requiere dependencias ni instalación.
 
-Bucle principal (Game Loop): El gestor que actualiza los fotogramas y dibuja los elementos en pantalla.
+## Ejecutar
 
-2. Reparto de Ramas de Funcionalidad (Para desarrollar en paralelo)
-Integrante A: Rama feature/jugador-y-controles
+Abre `index.html` en un navegador moderno.
 
-Objetivo: Implementar la nave del jugador.
+## Controles
 
-Tareas en OpenSpec:
+- **← / →** o **A / D**: mover la nave horizontalmente.
+- **Espacio**: disparar (mantener para fuego continuo).
+- **Enter**: iniciar o volver a empezar.
+- Elige **Fácil**, **Normal** o **Difícil** antes de cada partida.
 
-Pintar la nave espacial en pantalla.
+## Dificultad y HUD
 
-Configurar los eventos de teclado (mover arriba, abajo, izquierda, derecha y disparar láseres).
+La dificultad aumenta con el tiempo efectivo de amenaza. Fácil empieza en 0, Normal en 2:30 y Difícil en 5:00; por eso, Fácil al minuto cinco alcanza la misma amenaza que Difícil al comenzar. La barra vertical a la derecha muestra el nivel y su progreso al siguiente minuto:
 
-Establecer los límites de la pantalla para que la nave no se salga de los márgenes.
+| Amenaza efectiva | Estado |
+| --- | --- |
+| 0–<2 min | Fácil |
+| 2–<5 min | Normal |
+| 5–<10 min | Difícil |
+| 10–<15 min | Muy difícil |
+| 15–<20 min | Imposible |
+| 20 min o más | ¡JA, JA, JA…! |
 
-Integrante B: Rama feature/enemigos-y-oleadas
+Cada nivel aumenta la aparición y la presión de los enemigos. El generador puede producir picos muy difíciles, pero evita crear impactos inevitables al aparecer enemigos encima de la nave.
 
-Objetivo: Crear la lógica de los enemigos y su aparición (spawner).
+## Combate y mejoras
 
-Tareas en OpenSpec:
+- Los tres enemigos tienen sprites, resistencia, movimiento y patrones de disparo distintos.
+- Los disparos diagonales giran para seguir su trayectoria hacia abajo. Todos tienen brillo para distinguirlos mejor; los enemigos pueden destruirse con los del jugador y ambas balas desaparecen sin otorgar puntos.
+- Se intentan generar orbes aleatorios cada 30 segundos: escudo, vida, disparo adicional, velocidad temporal, perforación y abanico.
+- Los orbes conservan su tamaño y destacan con un halo de color, un aro pulsante y destellos.
+- El escudo bloquea un impacto; la vida no supera tres; velocidad dura 15 segundos; las mejoras de arma progresan durante la partida.
+- Aparece un boss con escolta cada minuto real. El aviso fija un punto; después, el láser viaja hasta ese mismo punto y destruye a los enemigos que alcanza, aunque el jugador se mueva.
 
-Diseñar la estructura de datos del enemigo (posición, velocidad, vida).
+## Recursos gráficos
 
-Programar un generador automático que haga aparecer naves enemigas desde la parte superior o los laterales de forma progresiva.
-
-Definir patrones básicos de movimiento descendente o persecución.
-
-Integrante C: Rama feature/colisiones-y-supervivencia
-
-Objetivo: Gestionar las interacciones, las muertes y el marcador de supervivencia.
-
-Tareas en OpenSpec:
-
-Sistema de detección de colisiones (láser del jugador contra enemigo, y enemigo contra la nave del jugador).
-
-Gestión de vidas del jugador y condición de Game Over cuando la salud llega a cero.
-
-Contador de puntuación basado en enemigos destruidos y tiempo de supervivencia.
+Los recursos SVG locales se cargan desde `assets/` con una sola extensión `.svg`: nave, enemigos, boss, proyectiles y los seis tipos de orbe (escudo, vida, disparo, aceleración, perforación y abanico). Los orbes conservan un halo Canvas tenue; los proyectiles tienen un brillo moderado para mantener su legibilidad. Si un SVG no carga, el juego dibuja un indicador de reserva.

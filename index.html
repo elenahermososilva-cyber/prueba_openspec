@@ -14,19 +14,47 @@
         <h1>Última órbita</h1>
         <p>Mueve la nave, mantén pulsado espacio para disparar y sobrevive.</p>
       </header>
-      <section class="game__hud" aria-label="Estado de la partida" aria-live="polite">
+      <label class="game__difficulty">
+        Dificultad inicial
+        <select id="difficulty-select">
+          <option value="easy">Fácil</option>
+          <option value="normal">Normal</option>
+          <option value="hard">Difícil</option>
+        </select>
+      </label>
+      <section class="game__hud" aria-label="Estado de la partida">
         <p>Puntuación <strong id="game-score">0</strong></p>
         <p>Vidas <strong id="game-lives">3</strong></p>
+        <p>Tiempo <strong id="game-time">00:00</strong></p>
+        <p>Mejoras <strong id="game-powerups">Ninguna</strong></p>
       </section>
-      <canvas
-        id="game-canvas"
-        class="game__canvas"
-        width="960"
-        height="600"
-        aria-label="Juego Última órbita"
-      >
-        Tu navegador no admite Canvas.
-      </canvas>
+      <div class="game__play-area">
+        <canvas
+          id="game-canvas"
+          class="game__canvas"
+          width="960"
+          height="600"
+          aria-label="Juego Última órbita"
+        >
+          Tu navegador no admite Canvas.
+        </canvas>
+        <aside class="threat" aria-label="Dificultad actual">
+          <strong id="threat-name" class="threat__name">Fácil</strong>
+          <span id="threat-level" class="threat__level">Nivel 1</span>
+          <div
+            id="threat-meter"
+            class="threat__meter"
+            role="meter"
+            aria-label="Progreso al siguiente nivel de amenaza"
+            aria-valuemin="0"
+            aria-valuemax="100"
+            aria-valuenow="0"
+          >
+            <div id="threat-fill" class="threat__fill"></div>
+          </div>
+          <span id="threat-next" class="threat__next">1:00 al siguiente nivel</span>
+        </aside>
+      </div>
       <p class="game__controls">
         <kbd>←</kbd> <kbd>→</kbd> o <kbd>A</kbd> <kbd>D</kbd> para moverte
         <span aria-hidden="true">·</span>

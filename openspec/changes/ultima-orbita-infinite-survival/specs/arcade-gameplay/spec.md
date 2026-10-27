@@ -72,6 +72,10 @@ El juego MUST presentar tres tipos visualmente diferenciados de enemigos, cada u
 - **WHEN** un enemigo dispara
 - **THEN** sus proyectiles se desplazan hacia la zona inferior a menor velocidad que los disparos del jugador y pueden dañar al jugador al colisionar
 
+#### Scenario: Los proyectiles diagonales siguen su trayectoria
+- **WHEN** un enemigo dispara en diagonal
+- **THEN** el SVG del proyectil se gira en la dirección de su trayectoria descendente
+
 ### Requirement: Defensa y colisión entre proyectiles
 El juego MUST permitir que los proyectiles del jugador destruyan enemigos y eliminen proyectiles enemigos sin causar daño al enemigo ni otorgar puntos por esa eliminación.
 
@@ -109,6 +113,10 @@ El juego MUST intentar generar un orbe aleatorio cada 30 segundos de partida ent
 - **WHEN** el jugador recoge un escudo
 - **THEN** el siguiente impacto que quitaría una vida consume el escudo y no reduce las vidas
 
+#### Scenario: Identificar visualmente cada tipo de orbe
+- **WHEN** aparece un orbe de cualquiera de los seis poderes
+- **THEN** se muestra su icono SVG local correspondiente, sin sustituirlo por una letra genérica
+
 #### Scenario: Obtener un orbe de vida
 - **WHEN** el jugador recoge una vida con menos de tres vidas
 - **THEN** recupera una vida, sin superar el máximo inicial de tres
@@ -128,9 +136,13 @@ El juego MUST introducir un boss acompañado por enemigos cada 60 segundos de ti
 - **WHEN** la partida alcanza un nuevo intervalo de 60 segundos
 - **THEN** aparece un boss con una escolta de enemigos
 
-#### Scenario: El boss prepara el rayo
+#### Scenario: El boss fija el punto de aviso
 - **WHEN** el boss va a disparar su rayo
-- **THEN** el juego muestra un aviso claro durante un tiempo de reacción ajustado al nivel efectivo de amenaza antes de dirigir el rayo a la posición del jugador
+- **THEN** el juego muestra un aviso claro hacia la posición del jugador al empezar la carga y mantiene fijo ese punto durante el tiempo de reacción ajustado al nivel efectivo de amenaza
+
+#### Scenario: El láser recorre su trayectoria completa
+- **WHEN** termina el aviso del boss y dispara
+- **THEN** el SVG del rayo avanza desde el boss hasta el punto fijado por el aviso, aunque el jugador se mueva, dañando al jugador y destruyendo a los enemigos y bosses que atraviesa
 
 #### Scenario: Aparece un boss mientras otro sigue activo
 - **WHEN** llega un intervalo de aparición y un boss anterior no ha sido destruido
