@@ -21,11 +21,19 @@ El juego MUST permitir disparar proyectiles láser hacia la parte superior; al i
 - **THEN** ambos desaparecen y la puntuación aumenta en 10 puntos
 
 ### Requirement: Oleadas de enemigos progresivas
-El juego MUST presentar enemigos en grupos finitos que descienden hacia la nave y MUST iniciar una nueva oleada al resolver todos los enemigos de la oleada actual mientras la partida siga activa; cada nueva oleada contiene más enemigos y una velocidad de descenso mayor que la anterior.
+El juego MUST presentar enemigos en grupos finitos que aparecen progresivamente desde la parte superior o los laterales y MUST iniciar una nueva oleada al resolver todos los enemigos de la oleada actual mientras la partida siga activa; cada nueva oleada contiene más enemigos y una velocidad de descenso mayor que la anterior. Cada enemigo MUST almacenar su posición, velocidad, vida y patrón de movimiento.
 
 #### Scenario: Avanzar a una oleada más difícil
 - **WHEN** todos los enemigos de una oleada han sido eliminados o han colisionado con la nave y quedan vidas
 - **THEN** comienza otra oleada con más enemigos y mayor velocidad de descenso que la oleada anterior
+
+#### Scenario: Enemigos con patrones básicos
+- **WHEN** se actualiza un enemigo de la oleada
+- **THEN** el enemigo desciende o persigue horizontalmente la posición de la nave mientras continúa descendiendo
+
+#### Scenario: Aparición progresiva desde varios bordes
+- **WHEN** comienza una oleada
+- **THEN** el generador introduce sus enemigos en intervalos desde la parte superior o desde los laterales, manteniendo el movimiento dentro del área visible
 
 ### Requirement: Pérdida de vidas por colisión
 El juego MUST restar exactamente una vida cuando un enemigo colisiona con la nave y MUST retirar de la partida al enemigo que causó esa colisión.

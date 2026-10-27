@@ -14,6 +14,13 @@ const SHIP_HEIGHT = 42;
 const SHIP_SPEED = 360;
 const LASER_SPEED = 560;
 const LASER_INTERVAL = 0.18;
+const ENEMY_RADIUS = 18;
+const ENEMIES_PER_WAVE = 5;
+const ENEMY_SPAWN_INTERVAL = 0.85;
+const ENEMY_BASE_SPEED = 40;
+const ENEMY_SPEED_PER_WAVE = 10;
+const ENEMY_PURSUIT_SPEED = 105;
+
 const INITIAL_LIVES = 3;
 
 const ship = {
@@ -30,8 +37,14 @@ const gameState = {
   lives: INITIAL_LIVES,
 };
 const messageElement = document.querySelector("#game-message");
+const scoreElement = document.querySelector("#game-score");
+const livesElement = document.querySelector("#game-lives");
 let laserCooldown = 0;
 let previousTime = 0;
+let waveNumber = 0;
+let enemiesToSpawn = 0;
+let enemySpawnCooldown = 0;
+messageElement.textContent = "Pulsa Enter para empezar.";
 
 const stars = Array.from({ length: 90 }, () => ({
   x: Math.random() * WIDTH,
@@ -57,10 +70,14 @@ window.addEventListener("keydown", (event) => {
   }
 
   event.preventDefault();
-  pressedKeys.add(event.code);
+  if (event.code !== "Enter") {
+    pressedKeys.add(event.code);
+  }
 
-  if (event.code === "Enter") {
-    startGame();
+  if (event.code === "Enter" && !event.repeat) {
+    if (gameState.status !== "playing") {
+      startGame();
+    }
   }
 });
 
@@ -79,6 +96,84 @@ function fireLaser() {
   });
 }
 
+function startWave() {
+  waveNumber += 1;
+  enemiesToSpawn = ENEMIES_PER_WAVE + waveNumber - 1;
+  enemySpawnCooldown = 0;
+  messageElement.textContent = `Oleada ${waveNumber}`;
+}
+
+function spawnEnemy() {
+  const waveSize = ENEMIES_PER_WAVE + waveNumber - 1;
+  const spawnIndex = waveSize - enemiesToSpawn;
+  const spawnPosition = spawnIndex % 3;
+  const pattern = spawnIndex % 2 === 0 ? "descend" : "pursue";
+  let x;
+  let y;
+  let vx = 0;
+  let spawnEdge = "top";
+
+  if (spawnPosition === 0) {
+    x = ENEMY_RADIUS + Math.random() * (WIDTH - ENEMY_RADIUS * 2);
+    y = -ENEMY_RADIUS;
+  } else {
+    spawnEdge = spawnPosition === 1 ? "left" : "right";
+    x = spawnEdge === "left" ? -ENEMY_RADIUS : WIDTH + ENEMY_RADIUS;
+    y = ENEMY_RADIUS + Math.random() * (HEIGHT * 0.45);
+    if (pattern === "descend") {
+      vx = spawnEdge === "left" ? ENEMY_PURSUIT_SPEED : -ENEMY_PURSUIT_SPEED;
+    }
+  }
+
+  enemies.push({
+    x,
+    y,
+    vx,
+    vy: ENEMY_BASE_SPEED + (waveNumber - 1) * ENEMY_SPEED_PER_WAVE,
+    health: 1,
+    maxHealth: 1,
+    pattern,
+    spawnEdge,
+    radius: ENEMY_RADIUS,
+  });
+  enemiesToSpawn -= 1;
+}
+
+function updateEnemies(deltaTime) {
+  enemySpawnCooldown -= deltaTime;
+  while (enemiesToSpawn > 0 && enemySpawnCooldown <= 0) {
+    spawnEnemy();
+    enemySpawnCooldown += ENEMY_SPAWN_INTERVAL;
+  }
+
+  for (const enemy of enemies) {
+    if (enemy.pattern === "pursue") {
+      const horizontalDistance = ship.x - enemy.x;
+      enemy.vx =
+        Math.abs(horizontalDistance) <= enemy.radius
+          ? 0
+          : Math.sign(horizontalDistance) * ENEMY_PURSUIT_SPEED;
+    } else if (
+      enemy.spawnEdge !== "top" &&
+      enemy.x >= enemy.radius &&
+      enemy.x <= WIDTH - enemy.radius
+    ) {
+      enemy.vx = 0;
+    }
+
+    enemy.x += enemy.vx * deltaTime;
+    enemy.y += enemy.vy * deltaTime;
+    enemy.x = Math.max(enemy.radius, Math.min(WIDTH - enemy.radius, enemy.x));
+  }
+
+  for (let index = enemies.length - 1; index >= 0; index -= 1) {
+    if (enemies[index].y - enemies[index].radius > HEIGHT) {
+      enemies.splice(index, 1);
+    }
+  }
+
+}
+
 function resetEntities() {
   lasers.length = 0;
   enemies.length = 0;
@@ -87,11 +182,21 @@ function resetEntities() {
 
 function startGame() {
   resetEntities();
+  waveNumber = 0;
+  enemiesToSpawn = 0;
+  enemySpawnCooldown = 0;
   gameState.status = "playing";
   gameState.score = 0;
   gameState.lives = INITIAL_LIVES;
   ship.x = WIDTH / 2;
   messageElement.textContent = "";
+  updateHud();
+  startWave();
+}
+
+function updateHud() {
+  scoreElement.textContent = String(gameState.score);
+  livesElement.textContent = String(gameState.lives);
 }
 
 function update(deltaTime) {
@@ -128,6 +233,73 @@ function update(deltaTime) {
       lasers.splice(index, 1);
     }
   }
+
+  updateEnemies(deltaTime);
+
+  for (let laserIndex = lasers.length - 1; laserIndex >= 0; laserIndex -= 1) {
+    const laser = lasers[laserIndex];
+    const enemyIndex = enemies.findIndex(
+      (enemy) =>
+        Math.abs(laser.x - enemy.x) <= enemy.radius + 2 &&
+        Math.abs(laser.y - enemy.y) <= enemy.radius + 9,
+    );
+
+    if (enemyIndex !== -1) {
+      lasers.splice(laserIndex, 1);
+      enemies.splice(enemyIndex, 1);
+      gameState.score += 10;
+      updateHud();
+    }
+  }
+
+  for (let index = enemies.length - 1; index >= 0; index -= 1) {
+    const enemy = enemies[index];
+    const overlapsShip =
+      Math.abs(enemy.x - ship.x) < enemy.radius + SHIP_WIDTH / 2 &&
+      Math.abs(enemy.y - ship.y) < enemy.radius + SHIP_HEIGHT / 2;
+
+    if (overlapsShip) {
+      enemies.splice(index, 1);
+      gameState.lives -= 1;
+      updateHud();
+
+      if (gameState.lives === 0) {
+        gameState.status = "game-over";
+        pressedKeys.clear();
+        messageElement.textContent = `Game Over. Puntuación final: ${gameState.score}`;
+        break;
+      }
+    }
+  }
+
+  if (
+    gameState.status === "playing" &&
+    enemiesToSpawn === 0 &&
+    enemies.length === 0
+  ) {
+    startWave();
+  }
+}
+
+function drawEnemy(enemy) {
+  context.save();
+  context.translate(enemy.x, enemy.y);
+  context.fillStyle = enemy.pattern === "pursue" ? "#ff9b6b" : "#ff526f";
+  context.strokeStyle = "#ffe4eb";
+  context.lineWidth = 2;
+  context.beginPath();
+  context.moveTo(0, enemy.radius);
+  context.lineTo(-enemy.radius, -enemy.radius / 2);
+  context.lineTo(-enemy.radius / 2, -enemy.radius);
+  context.lineTo(0, -enemy.radius / 2);
+  context.lineTo(enemy.radius / 2, -enemy.radius);
+  context.lineTo(enemy.radius, -enemy.radius / 2);
+  context.closePath();
+  context.fill();
+  context.stroke();
+  context.fillStyle = "#fff3a6";
+  context.fillRect(-3, -5, 6, 6);
+  context.restore();
 }
 
 function drawShip() {
@@ -155,45 +327,6 @@ function drawShip() {
   context.restore();
 }
 
-function drawHeart(x, y, filled) {
-  context.save();
-  context.translate(x, y);
-  context.beginPath();
-  context.moveTo(0, 7);
-  context.lineTo(-14, -5);
-  context.bezierCurveTo(-22, -12, -16, -24, -7, -20);
-  context.bezierCurveTo(-3, -18, 0, -14, 0, -11);
-  context.bezierCurveTo(0, -14, 3, -18, 7, -20);
-  context.bezierCurveTo(16, -24, 22, -12, 14, -5);
-  context.closePath();
-  context.fillStyle = filled ? "#ff687f" : "#59657d";
-  context.strokeStyle = filled ? "#ffd0d8" : "#8792a8";
-  context.lineWidth = 2;
-  context.fill();
-  context.stroke();
-  context.restore();
-}
-
-function drawHud() {
-  const hudPadding = 24;
-  const heartSpacing = 40;
-
-  for (let index = 0; index < INITIAL_LIVES; index += 1) {
-    drawHeart(
-      hudPadding + index * heartSpacing,
-      hudPadding + 12,
-      index < gameState.lives,
-    );
-  }
-
-  context.save();
-  context.fillStyle = "#eef4ff";
-  context.font = "600 26px Segoe UI, sans-serif";
-  context.textAlign = "right";
-  context.fillText(String(gameState.score), WIDTH - hudPadding, hudPadding + 12);
-  context.restore();
-}
-
 function render() {
   context.clearRect(0, 0, WIDTH, HEIGHT);
   context.fillStyle = "#080d1a";
@@ -208,8 +341,9 @@ function render() {
   }
   context.globalAlpha = 1;
 
-  drawHud();
-
+  for (const enemy of enemies) {
+    drawEnemy(enemy);
+  }
   for (const laser of lasers) {
     context.fillStyle = "#ff687f";
     context.shadowColor = "#ff345e";
@@ -219,6 +353,16 @@ function render() {
   context.shadowBlur = 0;
 
   drawShip();
+
+  if (gameState.status === "playing") {
+    context.fillStyle = "#eef4ff";
+    context.textAlign = "left";
+    context.font = "600 15px Segoe UI, sans-serif";
+    context.fillText(`Oleada ${waveNumber}`, 18, 28);
+    context.fillStyle = "#aebbd4";
+    context.font = "14px Segoe UI, sans-serif";
+    context.fillText(`Enemigos: ${enemies.length + enemiesToSpawn}`, 18, 49);
+  }
 
   if (gameState.status === "start") {
     context.fillStyle = "#eef4ff";
