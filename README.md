@@ -1,6 +1,6 @@
 # Última Órbita — Desarrollo de Aplicación mediante SDD Asistido por IA
 
-> **Proyecto académico**: Máster de FP en Inteligencia Artificial y Big Data (Málaga TechPark)  
+> **Proyecto académico**: Máster de FP en Inteligencia Artificial y Big Data (CPIFP Alan Turing, Málaga TechPark)  
 > **Práctica**: Desarrollo de una aplicación mediante SDD asistido por IA  
 > **Metodología estudiada e implementada**: [OpenSpec](https://github.com/Fission-AI/OpenSpec)
 
