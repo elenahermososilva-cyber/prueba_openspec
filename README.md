@@ -12,13 +12,15 @@ El objetivo principal de esta práctica no es la complejidad del código generad
 
 <table>
   <tr>
+    <td align="center" style="padding-bottom: 15px;"><strong>Pantalla inicial</strong></td>
+    <td align="center" style="padding-bottom: 15px;"><strong>Partida en ejecución</strong></td>
+  </tr>
+  <tr>
     <td align="center">
-      <strong>Pantalla inicial</strong><br>
-      <img src="./screenshots/menu.png" alt="Pantalla inicial de Última órbita" width="420">
+      <img src="./screenshots/menu.png" alt="Pantalla inicial de Última órbita" width="500">
     </td>
     <td align="center">
-      <strong>Partida en ejecución</strong><br>
-      <img src="./screenshots/game.png" alt="Partida de Última órbita en ejecución" width="420">
+      <img src="./screenshots/game.png" alt="Partida de Última órbita en ejecución" width="500">
     </td>
   </tr>
 </table>
