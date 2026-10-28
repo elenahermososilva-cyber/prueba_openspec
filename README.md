@@ -6,7 +6,7 @@
 
 ## 📌 1. Descripción del Proyecto
 
-**Última Órbita** es un videojuego arcade espacial 2D desarrollado para navegador web utilizando HTML5 Canvas y JavaScript vanilla. El jugador controla una nave que debe sobrevivir a oleadas progresivas de enemigos disparando proyectiles láser, gestionando picos de dificultad y aprovechando un sistema dinámico de mejoras por orbes.
+**Última Órbita** es un videojuego arcade espacial 2D desarrollado para navegador web utilizando HTML5 Canvas y JavaScript vanilla. El jugador controla una nave que debe sobrevivir a una generación continua de enemigos disparando proyectiles láser, gestionando picos de dificultad y aprovechando un sistema dinámico de mejoras por orbes.
 
 El objetivo principal de esta práctica no es la complejidad del código generado, sino la **aplicación, gestión y supervisión de la metodología Spec-Driven Development (SDD)** con asistencia de inteligencia artificial para la definición, implementación y gestión de cambios de requisitos en el software.
 
@@ -50,11 +50,16 @@ A continuación, accede a `http://localhost:8000` en tu navegador.
 
 * Sistema de disparos mediante proyectiles láser.
 
-* Generación de enemigos con patrones de movimiento y aceleración por oleadas.
+* Generación de enemigos con patrones de movimiento y dificultad progresiva.
 
 * Detección de colisiones (láser-enemigo y enemigo-nave).
 
 * Sistema de vidas y marcador de puntuación en tiempo real.
+
+El MVP inicial se definió con oleadas finitas. Después de completarlo se gestionó un
+cambio de requisitos mediante OpenSpec para convertir el juego en una experiencia de
+supervivencia infinita. La versión actual del código corresponde a esa evolución e
+incluye generación continua, bosses, proyectiles enemigos y mejoras.
 
 ### 4.2 Sistema de Dificultad y HUD
 
@@ -84,7 +89,7 @@ El HUD incluye una **barra vertical a la derecha** que refleja de forma visual e
   * Cada minuto real de juego aparece un Boss acompañado de escolta.
   * **Láser de apoyo**: Se activa tras una fijación de objetivo en un punto fijo. El láser viaja hasta ese punto y destruye a todos los enemigos a su paso, independientemente del movimiento de la nave.
 * **Sistema de Orbes de Mejoras**:
-  * Se intenta generar un orbe aleatorio cada $30\text{ segundos}$.
+  * Se intenta generar un orbe aleatorio cada $30\text{ segundos}$ de partida.
   * Destacan visualmente con un halo de color, un aro pulsante y destellos.
   * **Tipos de Orbe**:
     * 🛡️ **Escudo**: Bloquea un impacto directo.
@@ -94,11 +99,11 @@ El HUD incluye una **barra vertical a la derecha** que refleja de forma visual e
     * 🎯 **Perforación**: Disparos que atraviesan múltiples objetivos.
     * 🪭 **Abanico**: Cobertura de disparo en ángulo amplio.
 
-### 4.4 Recursos Gráficos
+### 4.4 Recursos gráficos
 
 El juego emplea vectores SVG locales almacenados en la carpeta `assets/`:
-* Nave principal, 3 tipos de enemigos, Boss y proyectiles.
-* 6 variedades de orbes (escudo, vida, disparo, aceleración, perforación, abanico).
+* Nave principal, 3 tipos de enemigos, boss y proyectiles.
+* 6 variedades de orbes: escudo, vida, disparo adicional, aceleración, perforación y abanico.
 * Efectos visuales de renderizado en Canvas: halos tenues en orbes y brillo moderado en proyectiles.
 * **Sistema de reserva (Fallback)**: Si algún archivo SVG no se puede cargar correctamente, el motor gráfico dibuja un indicador visual alternativo.
 
@@ -127,10 +132,14 @@ Verificación ◄── Implementación ◄── Tasks (Descomposición)
 
 ### Artefactos principales empleados:
 
-* [`proposal.md`](./openspec/changes/ultima-orbita-mvp/proposal.md): Justificación, alcance e impacto del cambio.
-* [`design.md`](./openspec/changes/ultima-orbita-mvp/design.md): Decisiones técnicas de renderizado Canvas y estructuras de datos.
-* [`tasks.md`](./openspec/changes/ultima-orbita-mvp/tasks.md): Desglose de tareas de implementación.
-* [`spec.md`](./openspec/changes/ultima-orbita-mvp/specs/arcade-gameplay/spec.md): Requisitos de comportamiento y criterios de aceptación verificables.
+* [Propuesta del MVP](./openspec/changes/archive/2026-10-27-ultima-orbita-mvp/proposal.md): Justificación, alcance e impacto del cambio inicial.
+* [Diseño del MVP](./openspec/changes/archive/2026-10-27-ultima-orbita-mvp/design.md): Decisiones técnicas de renderizado Canvas y estructuras de datos.
+* [Tareas del MVP](./openspec/changes/archive/2026-10-27-ultima-orbita-mvp/tasks.md): Desglose de tareas de implementación.
+* [Especificación del MVP](./openspec/changes/archive/2026-10-27-ultima-orbita-mvp/specs/arcade-gameplay/spec.md): Requisitos iniciales y criterios de aceptación.
+* [Propuesta de supervivencia infinita](./openspec/changes/archive/2026-10-27-ultima-orbita-infinite-survival/proposal.md): Cambio de requisitos posterior al MVP.
+* [Diseño de supervivencia infinita](./openspec/changes/archive/2026-10-27-ultima-orbita-infinite-survival/design.md): Decisiones técnicas del cambio.
+* [Tareas de supervivencia infinita](./openspec/changes/archive/2026-10-27-ultima-orbita-infinite-survival/tasks.md): Trabajo realizado para implementar el cambio.
+* [Especificación actual](./openspec/specs/arcade-gameplay/spec.md): Contrato funcional vigente del juego.
 
 ## 🔄 6. Gestión del Cambio de Requisitos
 
@@ -159,18 +168,22 @@ Tal y como establece el enunciado de la práctica, tras completar el MVP funcion
 │   └── specs/              # Especificación principal sincronizada
 └── assets/                 # Recursos gráficos SVG
     ├── player.svg
-    ├── boss.svg
-    ├── enemy1.svg, enemy2.svg, enemy3.svg
-    ├── orb-shield.svg, orb-life.svg, orb-shot.svg, ...
-    └── screenshot-1.png, screenshot-2.png
+    ├── boss1.svg
+    ├── enemigo1.svg, enemigo2.svg, enemigo3.svg
+    ├── disparo-jugador.svg
+    ├── disparo-enemigo1.svg, disparo-enemigo2.svg, disparo-enemigo3.svg
+    ├── disparo-boss1.svg
+    └── escudo.svg, heal.svg, +1disparo.svg, aceleracion.svg, perforante.svg, abanico.svg
 ```
 
-## 📢 8. Presentación y Documentación
+## 📢 8. Presentación y documentación
 
 * **Presentación para la exposición oral**: *No disponible*.
 * **Documentación de diseño**:
   * [Briefing inicial](./briefing.md)
   * [Product Requirements Document (PRD)](./PRD.md)
+  * [Instrucciones de la práctica](./instrucciones.txt)
+  * [Especificación actual de OpenSpec](./openspec/specs/arcade-gameplay/spec.md)
 
 
 ## 📚 9. Bibliografía y Recursos

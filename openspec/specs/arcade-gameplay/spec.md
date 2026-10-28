@@ -2,7 +2,7 @@
 
 ## Purpose
 
-Define el comportamiento jugable del MVP de Última órbita para que el jugador pueda pilotar una nave, combatir enemigos y avanzar por partidas de oleadas progresivamente más difíciles.
+Define el comportamiento jugable actual de Última órbita, un arcade espacial de supervivencia infinita en el que el jugador pilota una nave, combate una generación continua de enemigos y afronta una amenaza que aumenta progresivamente con el tiempo, incluyendo mejoras, bosses y feedback de combate.
 
 ## Requirements
 

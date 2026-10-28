@@ -300,13 +300,23 @@ function enemyCap() {
   return 10 + gameState.threatLevel * 6;
 }
 
-function spawnEnemy() {
+function selectEnemyType(maxCost = Number.POSITIVE_INFINITY) {
   const roll = Math.random();
   let type = "scout";
   const armoredChance = Math.min(0.08 + gameState.threatLevel * 0.012, 0.28);
   const strafeChance = Math.min(0.28 + gameState.threatLevel * 0.008, 0.42);
   if (roll < armoredChance) type = "armored";
   else if (roll < armoredChance + strafeChance) type = "strafe";
+  if (ENEMY_TYPES[type].cost > maxCost) {
+    const affordableTypes = Object.keys(ENEMY_TYPES).filter(
+      (candidate) => ENEMY_TYPES[candidate].cost <= maxCost,
+    );
+    type = affordableTypes[Math.floor(Math.random() * affordableTypes.length)];
+  }
+  return type;
+}
+
+function spawnEnemy(type = selectEnemyType()) {
 
   const config = ENEMY_TYPES[type];
   const radius = config.radius;
@@ -583,13 +593,13 @@ function updateThreatDirector(deltaTime) {
   enemySpawnCooldown -= deltaTime;
 
   if (
-    gameState.spawnBudget >= 1 &&
+    gameState.spawnBudget >= ENEMY_TYPES.scout.cost &&
     enemySpawnCooldown <= 0 &&
     enemies.length < enemyCap()
   ) {
-    const before = enemies.length;
-    spawnEnemy();
-    gameState.spawnBudget -= ENEMY_TYPES[enemies[before].type].cost;
+    const type = selectEnemyType(gameState.spawnBudget);
+    spawnEnemy(type);
+    gameState.spawnBudget -= ENEMY_TYPES[type].cost;
     enemySpawnCooldown += spawnInterval;
   }
 }
