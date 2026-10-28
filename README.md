@@ -10,6 +10,19 @@
 
 El objetivo principal de esta práctica no es la complejidad del código generado, sino la **aplicación, gestión y supervisión de la metodología Spec-Driven Development (SDD)** con asistencia de inteligencia artificial para la definición, implementación y gestión de cambios de requisitos en el software.
 
+<table>
+  <tr>
+    <td align="center">
+      <strong>Pantalla inicial</strong><br>
+      <img src="./screenshots/menu.png" alt="Pantalla inicial de Última órbita" width="420">
+    </td>
+    <td align="center">
+      <strong>Partida en ejecución</strong><br>
+      <img src="./screenshots/game.png" alt="Partida de Última órbita en ejecución" width="420">
+    </td>
+  </tr>
+</table>
+
 ## 🛠️ 2. Tecnologías y Herramientas
 
 * **Lenguajes y cliente**: HTML5, CSS3, JavaScript, HTML5 Canvas, Vectores SVG.
@@ -162,6 +175,7 @@ Tal y como establece el enunciado de la práctica, tras completar el MVP funcion
 ├── PRD.md                  # Product Requirements Document
 ├── README.md               # Documentación general del repositorio
 ├── presentacion.pdf        # Diapositivas empleadas en la exposición oral
+├── screenshots/            # Capturas de la aplicación funcionando
 ├── openspec/               # Configuración y artefactos de la metodología OpenSpec
 │   ├── config.yaml
 │   ├── changes/            # Registro de cambios (MVP e iteraciones)
@@ -178,7 +192,8 @@ Tal y como establece el enunciado de la práctica, tras completar el MVP funcion
 
 ## 📢 8. Presentación y documentación
 
-* **Presentación para la exposición oral**: *No disponible*.
+* **Presentación para la exposición oral**: [presentacion.pdf](./presentacion.pdf).
+
 * **Documentación de diseño**:
   * [Briefing inicial](./briefing.md)
   * [Product Requirements Document (PRD)](./PRD.md)
